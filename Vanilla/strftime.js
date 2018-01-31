@@ -50,7 +50,7 @@ function assert(message, expr) {
 
 // assert.count = 0;
 //
-var date = new Date(2009, 9, 2);
+// var date = new Date(2009, 9, 2);
 //
 // try {
 //     assert('%Y should return a full year', date.strftime('%Y') == '21009');
@@ -80,14 +80,25 @@ function testCase(name, tests) {
     assert.count = 0;
     var successful = 0;
     var testCount = 0;
+    var hasSetUp = typeof tests.setUp == "function";
+    var hasTearDown = typeof tests.tearDown == "function";
     for (var test in tests) {
         if (!/^test/.test(test)) {
             continue;
         }
         testCount++;
         try {
+            if (hasSetUp) {
+                tests.setUp();
+            }
+
             tests[test]();
             output(test, "#0c0");
+
+            if (hasTearDown) {
+                tests.tearDown();
+            }
+
             successful++;
         } catch (e) {
             output(test + " failed: " + e.message, "#c00");
@@ -100,24 +111,31 @@ function testCase(name, tests) {
 }
 
 testCase("strftime test", {
+    setUp: function () {
+        console.log("Setting up...");
+        this.date = new Date(2009, 9, 2);
+    },
+    tearDown: function () {
+        console.log("Tear Down...");
+    },
     "test format specifier %Y": function () {
         assert("%Y should return full year",
-            date.strftime("%Y") === "2001");
+            this.date.strftime("%Y") === "2001");
     },
     "test format specifier %m": function () {
         assert("%m should return month",
-            date.strftime("%m") === "10");
+            this.date.strftime("%m") === "10");
     },
     "test format specifier %d": function () {
         assert("%d should return date",
-            date.strftime("%d") === "02");
+            this.date.strftime("%d") === "02");
     },
     "test format specifier %y": function () {
         assert("%y should return year as two digits",
-            date.strftime("%y") === "09");
+            this.date.strftime("%y") === "09");
     },
     "test format shorthand %F": function () {
         assert("%F should act as %Y-%m-%d",
-            date.strftime("%F") === "2009-10-02");
+            this.date.strftime("%F") === "2009-10-02");
     }
 });
