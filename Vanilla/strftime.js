@@ -34,7 +34,14 @@ Date.prototype.strftime = (function () {
         },
         // Format shorthands
         F: "%Y-%m-%d",
-        D: "%m/%d/%y"
+        D: "%m/%d/%y",
+        j: function (date) {
+            var firstDayOfYear = new Date(date.getFullYear(), 1, 1);
+            var time = date.getTime() - firstDayOfYear.getTime();
+            var diff = Math.ceil(time / (60 * 60 * 1000 * 24));
+            console.log(diff);
+            return diff;
+        }
     };
     return strftime;
 }());
@@ -112,15 +119,14 @@ function testCase(name, tests) {
 
 testCase("strftime test", {
     setUp: function () {
-        console.log("Setting up...");
-        this.date = new Date(2009, 9, 2);
+        this.date = new Date(2009, 1, 4);
     },
     tearDown: function () {
         console.log("Tear Down...");
     },
     "test format specifier %Y": function () {
         assert("%Y should return full year",
-            this.date.strftime("%Y") === "2001");
+            this.date.strftime("%Y") === "2009");
     },
     "test format specifier %m": function () {
         assert("%m should return month",
@@ -137,5 +143,9 @@ testCase("strftime test", {
     "test format shorthand %F": function () {
         assert("%F should act as %Y-%m-%d",
             this.date.strftime("%F") === "2009-10-02");
-    }
+    },
+    "test format specifier %j": function () {
+        assert("%j should return current day of provided year",
+            this.date.strftime("%j") === "3");
+    },
 });
