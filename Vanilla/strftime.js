@@ -39,7 +39,6 @@ Date.prototype.strftime = (function () {
             var firstDayOfYear = new Date(date.getFullYear(), 1, 1);
             var time = date.getTime() - firstDayOfYear.getTime();
             var diff = Math.ceil(time / (60 * 60 * 1000 * 24));
-            console.log(diff);
             return diff;
         }
     };
@@ -149,3 +148,19 @@ testCase("strftime test", {
             this.date.strftime("%j") === "3");
     },
 });
+
+String.prototype.trim = function () {
+    console.log(this.replace(/^\s+/, '').replace(/\s+$/, ''));
+    return this.replace(/^\s+/, '').replace(/\s+$/, '');
+}
+
+testCase('test trim', {
+    'test trim should remove leading white space': function () {
+        console.log('leading');
+        assert('should remove leading white space', 'tran van quy' === '     tran van quy'.trim());
+    },
+    'test trim should remove trailing white space': function () {
+        console.log('trailing');
+        assert('should remove trailing white space','tran van quy' === 'tran van quy     '.trim() )
+    }
+})
