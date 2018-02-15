@@ -1,5 +1,3 @@
-// tddjs.namespace("ajax");
-
 (function () {
     var xhr;
     var ajax = tddjs.namespace("ajax");
@@ -30,8 +28,3 @@
 
     return null;
 })();
-
-
-tddjs.namespace("ajax").isHostMethod = function () {
-
-}
